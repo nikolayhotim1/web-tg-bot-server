@@ -42,11 +42,7 @@ bot.on('message', async msg => {
 })
 
 app.post('/web-data', async (req, res) => {
-	const { queryId, products, totalPrice } = req.body
-	const productsTitles = products
-		.map(p => p.title)
-		.split()
-		.join(', ')
+	const { queryId, products = [], totalPrice } = req.body
 
 	try {
 		await bot.answerWebAppQuery(queryId, {
@@ -54,7 +50,9 @@ app.post('/web-data', async (req, res) => {
 			id: queryId,
 			title: 'Successful purchase',
 			input_message_content: {
-				message_text: `Congratulations on your purchase! You have purchased goods (${productsTitles}) totaling ${totalPrice}.`
+				message_text: `Congratulations on your purchase! You have purchased goods (${products
+					.map(p => p.title)
+					.join(', ')}) totaling ${totalPrice}$.`
 			}
 		})
 
